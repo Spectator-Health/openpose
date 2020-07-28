@@ -1,7 +1,15 @@
 # CUDA 8.0 + cuDNN 5 + build dependencies
-FROM nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
+# Docker file has been modified to account for Nvidia Jetson containers 
 
-LABEL maintainer="Timothy Liu <timothy_liu@mymail.sutd.edu.sg>"
+#FROM nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
+
+#LABEL maintainer="Timothy Liu <timothy_liu@mymail.sutd.edu.sg>"
+
+# Actually I custom-built this one to have TensorFlow 2.2
+#FROM nvcr.io/nvidia/l4t-ml:r32.4.2-tf-2.2-py3
+FROM nvcr.io/nvidia/deepstream-l4t:5.0-dp-20.04-base
+
+LABEL maintainer="Adrian K. Fontanilla <adrian@spectatorhealth.com>" 
 
 USER root
 
@@ -57,11 +65,12 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python3 get-pip.py --force-reinstall && \
     rm get-pip.py && \
     pip install --no-cache-dir Cython && \
-    pip install --no-cache-dir -r /openpose/docker_files/requirements.txt && \
+    # Commented out b/c requirements already exist in Jetson container
+    #pip install --no-cache-dir -r /openpose/docker_files/requirements.txt && \
     cd /openpose && mkdir build && cd build && \
     # replace CMakeLists.txt with one that specifies BUILD_PYTHON=ON
     cp /openpose/docker_files/CMakeLists.txt /openpose/CMakeLists.txt && \
-    cmake .. && make -j && cd python && make install && \
+    cmake -DCUDNN_ROOT=/usr/lib/aarch64-linux-gnu/ -DCUDNN_INCLUDE=/usr/include/ .. && make -j$(nproc) && cd python && make install && \
     # in Python code:
     # sys.path.append('/openpose/build/python')
     rm -rf /home/$OP_USER/.cache
