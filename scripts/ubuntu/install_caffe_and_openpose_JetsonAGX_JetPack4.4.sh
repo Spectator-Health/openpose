@@ -37,8 +37,8 @@ function executeShInItsFolder {
 
 rm -rf ./3rdparty/caffe && mkdir ./3rdparty/caffe
 git submodule update --init --recursive --remote
-#executeShInItsFolder "install_caffe_JetsonAGX_JetPack4.4.sh" "./3rdparty/caffe" "../.."
-executeShInItsFolder "install_caffe_JetsonTX2_JetPack3.3.sh" "./3rdparty/caffe" "../.."
+executeShInItsFolder "install_caffe_JetsonAGX_JetPack4.4.sh" "./3rdparty/caffe" "../.."
+#executeShInItsFolder "install_caffe_JetsonTX2_JetPack3.3.sh" "./3rdparty/caffe" "../.."
 exitIfError
 
 
