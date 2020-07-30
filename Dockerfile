@@ -22,6 +22,7 @@ RUN apt-get update && \
     # install system packages
     software-properties-common \
     curl \
+    python3-pip \ 
     python3-dev \
     python3-opencv \ 
     python3-tk \
@@ -65,15 +66,18 @@ COPY . /openpose
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python3 get-pip.py --force-reinstall && \
     rm get-pip.py && \
-    pip install --no-cache-dir Cython 
+    sudo -H pip3 install --no-cache-dir Cython 
     # Commented out b/c requirements already exist in Jetson container
-    #pip install --no-cache-dir -r /openpose/docker_files/requirements.txt && \
-RUN cd /openpose && mkdir build && cd build && \
-    # replace CMakeLists.txt with one that specifies BUILD_PYTHON=ON
-    cp /openpose/docker_files/CMakeLists.txt /openpose/CMakeLists.txt && \
-    cmake -DCUDNN_ROOT=/usr/lib/aarch64-linux-gnu/ -DCUDNN_INCLUDE=/usr/include/ .. && make -j$(nproc) && cd python && make install && \
-    # in Python code:
-    # sys.path.append('/openpose/build/python')
-    rm -rf /home/$OP_USER/.cache
+    #sudo -H pip3 install --no-cache-dir -r /openpose/docker_files/requirements.txt && \
+RUN ls /usr/lib/aarch64-linux-gnu/libcudn* && ls /usr/include/ 
 
-USER $OP_UID
+#RUN cd /openpose && mkdir build && cd build && \
+#    # replace CMakeLists.txt with one that specifies BUILD_PYTHON=ON
+#    cp /openpose/docker_files/CMakeLists.txt /openpose/CMakeLists.txt && \
+#    cmake -DCUDNN_ROOT=/usr/lib/aarch64-linux-gnu/ -DCUDNN_INCLUDE=/usr/include/ .. && make -j$(nproc) && cd python && make install && \
+#    #cmake .. && make -j`nproc` && cd python && make install && \ 
+#    # in Python code:
+#    # sys.path.append('/openpose/build/python')
+#    rm -rf /home/$OP_USER/.cache
+
+#USER $OP_USER
