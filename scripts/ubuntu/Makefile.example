@@ -212,14 +212,29 @@ endif
 ifeq ($(USE_OPENCV), 1)
 	LIBRARIES += opencv_core opencv_highgui opencv_imgproc opencv_objdetect opencv_video opencv_calib3d
 
-	ifeq ($(OPENCV_VERSION), 3)
-		LIBRARIES += opencv_imgcodecs opencv_videoio
-		# Cuda warping removed for TX2 compatibility (PR #989)
-		# LIBRARIES += opencv_imgcodecs opencv_videoio opencv_cudawarping
+	#ifeq ($(OPENCV_VERSION), 3)
+	#	LIBRARIES += opencv_imgcodecs opencv_videoio
+	#	# Cuda warping removed for TX2 compatibility (PR #989)
+	#	# LIBRARIES += opencv_imgcodecs opencv_videoio opencv_cudawarping
+	#else
+	#	LIBRARIES += opencv_contrib opencv_gpu
+	#endif
+	
+	# Added OpenCV 4 compatibility 
+	ifeq ($(OPENCV_VERSION), $(filter $(OPENCV_VERSION), 3 4))
+                LIBRARIES += opencv_imgcodecs opencv_videoio
 	else
-		LIBRARIES += opencv_contrib opencv_gpu
-	endif
+		LIBRARIES += opencv_contrib opencv_gpu 
+        endif
 
+        ifeq ($(OPENCV_VERSION), 4)
+                ifeq ($(USE_PKG_CONFIG), 1)
+                        INCLUDE_DIRS += $(shell pkg-config opencv4 --cflags-only-I | sed 's/-I//g')
+                else
+                        INCLUDE_DIRS += /usr/include/opencv4 /usr/local/include/opencv4
+                        INCLUDE_DIRS += /usr/include/opencv4/opencv /usr/local/include/opencv4/opencv
+                endif
+        endif
 endif
 ##############################
 # OpenPose extra code: commented
