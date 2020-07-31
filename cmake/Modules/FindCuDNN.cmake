@@ -1,7 +1,7 @@
 set(CUDNN_ROOT "" CACHE PATH "CUDNN root folder")
 set(CUDNN_LIB_NAME "libcudnn.so")
 
-find_path(CUDNN_INCLUDE cudnn.h
+find_path(CUDNN_INCLUDE cudnn_version.h
     PATHS ${CUDNN_ROOT} $ENV{CUDNN_ROOT} ${CUDA_TOOLKIT_INCLUDE}
     DOC "Path to cuDNN include directory." )
 
