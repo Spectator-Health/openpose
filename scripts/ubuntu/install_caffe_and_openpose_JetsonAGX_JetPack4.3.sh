@@ -53,8 +53,12 @@ echo ""
 
 # Python build 
 # NOTE: Don't do make install command b/c it installs openpose module to Python 2.7 directory 
+# If you run `make` (default path is `/usr/local/python` for Ubuntu), you can also access the OpenPose/python module from there. This will install OpenPose and the python library at your desired installation path. Ensure that this is in your python path in order to use it.
 cd python 
 make -j`nproc`
 
 echo "------------------------- Python Modules Installed -------------------------"
 echo ""
+
+cd ../.. 
+
