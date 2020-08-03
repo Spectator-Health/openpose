@@ -17,7 +17,9 @@ sudo -H pip install --upgrade numpy protobuf opencv-python
 # Python3 libs
 sudo apt-get --assume-yes install python3-setuptools python3-dev build-essential
 sudo apt-get --assume-yes install python3-pip
-sudo -H pip3 install --upgrade numpy protobuf opencv-python
+# JetPack 4.4 includes OpenCV 
+#sudo -H pip3 install --upgrade numpy protobuf opencv-python
+sudo -H pip3 install --upgrade numpy protobuf 
 # OpenCV 2.4 -> Added as option
 # # sudo apt-get --assume-yes install libopencv-dev
 # OpenCL Generic
